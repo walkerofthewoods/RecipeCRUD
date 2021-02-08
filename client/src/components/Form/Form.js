@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import FileBase from 'react-file-base64';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useStyles from './styles';
 import { createPost, updatePost } from '../../actions/posts';
@@ -14,25 +14,46 @@ const Form = ({ currentId, setCurrentId }) => {
 		tags: '',
 		selectedFile: ''
 	});
+
+	const post = useSelector((state) => (currentId ? state.posts.find((p) => p._id === currentId) : 0));
+
 	const classes = useStyles();
 	const dispatch = useDispatch();
 
-	const handleSubmit = (e) => {
+	useEffect(
+		() => {
+			if (post) setPostData(post);
+		},
+		[ post ]
+	);
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		if (currentId) {
-			dispatch(updatePost(currentId, postData));
-		} else {
+		if (currentId === 0) {
 			dispatch(createPost(postData));
+		} else {
+			dispatch(updatePost(currentId, postData));
 		}
+
+		clear();
 	};
 
-	const clear = () => {};
+	const clear = () => {
+		setCurrentId(0);
+		setPostData({
+			creator: '',
+			title: '',
+			message: '',
+			tags: '',
+			selectedFile: ''
+		});
+	};
 
 	return (
 		<Paper className={classes.paper}>
 			<form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-				<Typography variant="h6">Creating a Recipe</Typography>
+				<Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Recipe</Typography>
 				<TextField
 					name="creator"
 					variant="outlined"
@@ -60,10 +81,10 @@ const Form = ({ currentId, setCurrentId }) => {
 				<TextField
 					name="tags"
 					variant="outlined"
-					label="Tags"
+					label="Tags (comma separated)"
 					fullWidth
 					value={postData.tags}
-					onChange={(e) => setPostData({ ...postData, tags: e.target.value })}
+					onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })}
 				/>
 				<div className={classes.fileInput}>
 					<FileBase
