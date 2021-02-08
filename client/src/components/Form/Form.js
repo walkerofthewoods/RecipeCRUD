@@ -24,7 +24,7 @@ const Form = ({ currentId, setCurrentId }) => {
 		() => {
 			if (post) setPostData(post);
 		},
-		[ post ]
+		[ post, dispatch ]
 	);
 
 	const handleSubmit = async (e) => {

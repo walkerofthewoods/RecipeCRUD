@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const url = 'http://localhost:5000/posts';
-// const url = 'https://recipe-social-app.herokuapp.com/posts';
+//const url = 'http://localhost:5000/posts';
+ const url = 'https://recipe-social-app.herokuapp.com/posts';
 // to-do change for deploy
 
 
