@@ -24,7 +24,7 @@ const App = () => {
 		<Container maxWidth="lg">
 			<AppBar className={classes.appBar} position="static" color="inherit">
 				<Typography className={classes.heading} variant="h2" align="center">
-					Recipes
+					QuickBites
 				</Typography>
 				<img className={classes.image} src={cook_logo} alt="cook logo" height="60" />
 			</AppBar>
